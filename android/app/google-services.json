@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828413654047",
+    "project_id": "abusharesride",
+    "storage_bucket": "abusharesride.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828413654047:android:1ac86ddfc74865a5ec112a",
+        "android_client_info": {
+          "package_name": "com.example.abu_share_ride"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfQsj7LPH03x4CLUtOhtIm4EGlITRiFn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
