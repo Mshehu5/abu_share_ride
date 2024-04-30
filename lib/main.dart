@@ -1,25 +1,48 @@
 // import 'package:abu_share_ride/screens/forgot_password_screen.dart';
 // import 'package:abu_share_ride/screens/login_screen.dart';
 
+import 'package:abu_share_ride/screens/main_screen.dart';
+
 import 'ui/splash.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:abu_share_ride/screens/main_screen.dart';
 // import 'package:abu_share_ride/screens/login_screen.dart';
 import 'package:abu_share_ride/themeProvider/theme_provider.dart';
-
-late SharedPreferences sharedPreferences;
+// import 'package:here_sdk/core.dart';
+// import 'package:here_sdk/core.engine.dart';
+// import 'package:here_sdk/core.errors.dart';
+// import 'package:here_sdk/mapview.dart';
 
 Future<void> main() async {
+  // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
+  // _initializeHERESDK();
   WidgetsFlutterBinding.ensureInitialized();
-  sharedPreferences = await SharedPreferences.getInstance();
   await dotenv.load(fileName: "assets/config/.env");
   // await Firebase.initializeApp();
   runApp(const MainApp());
 }
+
+// void _initializeHERESDK() async {
+//   // Needs to be called before accessing SDKOptions to load necessary libraries.
+//   SdkContext.init(IsolateOrigin.main);
+
+//   // Set your credentials for the HERE SDK.
+//   String accessKeyId = "WLlnIIWLrSW2oJzjjrh28w";
+//   String accessKeySecret =
+//       "xMyvLFJSlp-sa7W7SPra78PzcxVILCDC-xD8tQ4jMiI3vhBrrnjLgxZSoZrIrzKSmLtLqNcgvat_PTTBPIFzrw";
+//   SDKOptions sdkOptions =
+//       SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
+
+//   try {
+//     await SDKNativeEngine.makeSharedInstance(sdkOptions);
+//   } on InstantiationException {
+//     throw Exception("Failed to initialize the HERE SDK.");
+//   }
+// }
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -31,7 +54,7 @@ class MainApp extends StatelessWidget {
       theme: MyThemes.lightTheme,
       darkTheme: MyThemes.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: Splash(),
+      home: MainScreen(),
     );
   }
 }

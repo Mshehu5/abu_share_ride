@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 
-import '../helpers/mapbox_handler.dart';
 import '../main.dart';
-import '../screens/home.dart';
+// import '../screens/home.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -38,44 +36,45 @@ class _SplashState extends State<Splash> {
     }
 
     // Get the current user location
-    LocationData _locationData = await _location.getLocation();
-    LatLng currentLocation =
-        LatLng(_locationData.latitude!, _locationData.longitude!);
-
     // Get the current user address
-    String currentAddress =
-        (await getParsedReverseGeocoding(currentLocation))['place'];
 
     // Store the user location in sharedPreferences
-    sharedPreferences.setDouble('latitude', _locationData.latitude!);
-    sharedPreferences.setDouble('longitude', _locationData.longitude!);
-    sharedPreferences.setString('current-address', currentAddress);
+    // sharedPreferences.setDouble('latitude', _locationData.latitude!);
+    // sharedPreferences.setDouble('longitude', _locationData.longitude!);
+    // sharedPreferences.setString('current-address', currentAddress);
 
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (_) => const Home()), (route) => false);
+    //   Navigator.pushAndRemoveUntil(context,
+    //       MaterialPageRoute(builder: (_) => const Home()), (route) => false);
+    // }
+
+    @override
+    Widget build(BuildContext context) {
+      return Material(
+        color: Colors.lightGreen,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              CupertinoIcons.car_detailed,
+              color: Colors.white,
+              size: 120,
+            ),
+            Text(
+              'ABU SHARE RIDE',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge
+                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.lightGreen,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            CupertinoIcons.car_detailed,
-            color: Colors.white,
-            size: 120,
-          ),
-          Text(
-            'ABU SHARE RIDE',
-            style: Theme.of(context)
-                .textTheme
-                .headlineLarge
-                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
