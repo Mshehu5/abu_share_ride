@@ -1,21 +1,15 @@
-// import 'package:abu_share_ride/screens/forgot_password_screen.dart';
-// import 'package:abu_share_ride/screens/login_screen.dart';
-
+import 'package:abu_share_ride/infoHandler/app_info.dart';
 import 'package:abu_share_ride/screens/main_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'ui/splash.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:abu_share_ride/screens/main_screen.dart';
-// import 'package:abu_share_ride/screens/login_screen.dart';
+// import 'package:abu_share_ride/screens/login_screen. dart';
 import 'package:abu_share_ride/themeProvider/theme_provider.dart';
-// import 'package:here_sdk/core.dart';
-// import 'package:here_sdk/core.engine.dart';
-// import 'package:here_sdk/core.errors.dart';
-// import 'package:here_sdk/mapview.dart';
+
 
 Future<void> main() async {
   // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
@@ -46,15 +40,20 @@ Future<void> main() async {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "ABU SHARE RIDE",
-      themeMode: ThemeMode.system,
-      theme: MyThemes.lightTheme,
-      darkTheme: MyThemes.darkTheme,
-      debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+    return ChangeNotifierProvider(
+    create: (context) =>AppInfo(),
+    child: MaterialApp(
+    title: "ABU SHARE RIDE",
+    themeMode: ThemeMode.system,
+    theme: MyThemes.lightTheme,
+    darkTheme: MyThemes.darkTheme,
+    debugShowCheckedModeBanner: false,
+    home: MainScreen(),
+    ),
     );
   }
 }
