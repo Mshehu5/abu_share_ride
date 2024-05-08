@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
               email: emailTextEditingController.text.trim(),
               password: passwordTextEditingController.text.trim())
           .then((auth) async {
-        DatabaseReference userRef = FirebaseDatabase.instance.ref().child("users");
+        DatabaseReference userRef = FirebaseDatabase.instance.ref().child("userz");
         userRef.child(firebaseAuth.currentUser!.uid).once().then((value) async {
           final snap = value.snapshot;
           if(snap.value != null){
