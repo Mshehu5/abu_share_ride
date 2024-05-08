@@ -8,19 +8,20 @@ class RequestAssistant {
     http.Response httpResponse = await http.get(Uri.parse(url));
 
   try {
+
     if (httpResponse.statusCode == 200) // successful
         {
-      String responeData = httpResponse.body;
-      var decodeResponseOata = jsonDecode(responeData);
+      String responseData = httpResponse.body;
+      var decodeResponseData = jsonDecode(responseData);
 
-      return decodeResponseOata;
+      return decodeResponseData;
 
     }
     else {
-      return "Error Occuread. Failed No Response";
+      throw Exception('Error: Failed to fetch data. Status code: ${httpResponse.statusCode}');
     }
-  } catch (exp){
-    return "Error Occured. Failed No Responme";
+  } catch (error){
+    throw Exception('Error fetching data: $error');
 
   }
 

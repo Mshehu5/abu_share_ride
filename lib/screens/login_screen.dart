@@ -1,10 +1,14 @@
 import 'package:abu_share_ride/global/global.dart';
 import 'package:abu_share_ride/screens/forgot_password_screen.dart';
 import 'package:abu_share_ride/screens/main_screen.dart';
+import 'package:abu_share_ride/screens/register_screen.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../splashScreens/splash_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,11 +33,20 @@ class _LoginScreenState extends State<LoginScreen> {
               email: emailTextEditingController.text.trim(),
               password: passwordTextEditingController.text.trim())
           .then((auth) async {
-        currentUser = auth.user;
-
-        await Fluttertoast.showToast(msg: "Successfully Logged In");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => MainScreen()));
+        DatabaseReference userRef = FirebaseDatabase.instance.ref().child("users");
+        userRef.child(firebaseAuth.currentUser!.uid).once().then((value) async {
+          final snap = value.snapshot;
+          if(snap.value != null){
+            currentUser = auth.user;
+            await Fluttertoast.showToast(msg: "Succesfully logged In");
+            Navigator.push(context, MaterialPageRoute(builder: (c) => MainScreen()));
+          }
+          else{
+            await Fluttertoast.showToast(msg: "No record exist with this email");
+            firebaseAuth.signOut();
+            Navigator.push(context, MaterialPageRoute(builder: (c) => SplashScreen()));
+          }
+        });
       }).catchError((errorMessage) {
         Fluttertoast.showToast(msg: "Error occured: \n $errorMessage");
       });
@@ -268,7 +281,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         width: 5,
                                       ),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (c) => RegisterScreen()));
+                                        },
                                         child: Text(
                                           "Register",
                                           style: TextStyle(

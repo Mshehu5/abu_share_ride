@@ -1,5 +1,9 @@
 import 'package:abu_share_ride/infoHandler/app_info.dart';
 import 'package:abu_share_ride/screens/main_screen.dart';
+import 'package:abu_share_ride/screens/register_screen.dart';
+import 'package:abu_share_ride/screens/search_places_screen.dart';
+import 'package:abu_share_ride/splashScreens/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import 'ui/splash.dart';
@@ -15,8 +19,13 @@ Future<void> main() async {
   // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
   // _initializeHERESDK();
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "assets/config/.env");
-  // await Firebase.initializeApp();
+  // await dotenv.load(fileName: "assets/config/.env");
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(apiKey: "AIzaSyAfQsj7LPH03x4CLUtOhtIm4EGlITRiFn4",
+        appId: "1:828413654047:android:1ac86ddfc74865a5ec112a",
+        messagingSenderId: "828413654047",
+        projectId: "abusharesride"),
+  );
   runApp(const MainApp());
 }
 
@@ -45,14 +54,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) =>AppInfo(),
+    create: (context) => AppInfo(),
     child: MaterialApp(
     title: "ABU SHARE RIDE",
     themeMode: ThemeMode.system,
     theme: MyThemes.lightTheme,
     darkTheme: MyThemes.darkTheme,
     debugShowCheckedModeBanner: false,
-    home: MainScreen(),
+    home: RegisterScreen(),
     ),
     );
   }

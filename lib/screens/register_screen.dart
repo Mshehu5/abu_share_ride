@@ -1,11 +1,15 @@
 import 'package:abu_share_ride/screens/main_screen.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:abu_share_ride/global/global.dart';
+
+import 'forgot_password_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -32,31 +36,83 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 //Function to validate all the form fields
 
+  // void _submit() async {
+  //   if (_formkey.currentState!.validate()) {
+  //     await firebaseAuth
+  //         .createUserWithEmailAndPassword(
+  //             email: emailTextEditingController.text.trim(),
+  //             password: passwordTextEditingController.text.trim())
+  //         .then((auth) async {
+  //       if (currentUser != null) {
+  //         Map userMap = {
+  //           "id": currentUser!.uid,
+  //           "name": nameTextEditingController.text.trim(),
+  //           "email": emailTextEditingController.text.trim(),
+  //           "address": addressTextEditingController.text.trim(),
+  //           "phone": phoneTextEditingController.text.trim(),
+  //         };
+  //         DatabaseReference userRef =
+  //             FirebaseDatabase.instance.ref().child("users");
+  //         userRef.child(currentUser!.uid).set(userMap);
+  //       }
+  //       await Fluttertoast.showToast(msg: "Successfully Registered");
+  //       Navigator.push(
+  //           context, MaterialPageRoute(builder: (c) => MainScreen()));
+  //     }).catchError((errorMessage) {
+  //       Fluttertoast.showToast(msg: "Error o ccured: \n $errorMessage");
+  //     });
+  //   } else {
+  //     Fluttertoast.showToast(msg: "Not all fields are valid");
+  //   }
+  // }
+
   void _submit() async {
     if (_formkey.currentState!.validate()) {
-      await firebaseAuth
-          .createUserWithEmailAndPassword(
-              email: emailTextEditingController.text.trim(),
-              password: passwordTextEditingController.text.trim())
-          .then((auth) async {
-        if (currentUser != null) {
-          Map userMap = {
-            "id": currentUser!.uid,
+      try {
+        // Create user with Firebase Authentication
+        UserCredential userCredential = await firebaseAuth
+            .createUserWithEmailAndPassword(
+            email: emailTextEditingController.text.trim(),
+            password: passwordTextEditingController.text.trim());
+
+        // Check if user creation was successful
+        if (userCredential != null) {
+          User? currentUser = userCredential.user;
+
+          // Prepare user data map with proper handling of null values
+          Map<String, String> userMap = {
+            "id": currentUser?.uid ?? "", // Use null-safe operator for 'uid'
             "name": nameTextEditingController.text.trim(),
             "email": emailTextEditingController.text.trim(),
             "address": addressTextEditingController.text.trim(),
             "phone": phoneTextEditingController.text.trim(),
           };
-          DatabaseReference userRef =
-              FirebaseDatabase.instance.ref().child("users");
-          userRef.child(currentUser!.uid).set(userMap);
+
+          // Create a reference to the "drivers" node in the database
+          DatabaseReference userRef = FirebaseDatabase.instance.ref().child("userz").child(currentUser!.uid);
+
+          // Save user data to Firebase Realtime Database
+          await userRef.set(userMap);
+
+          // Display success message
+          Fluttertoast.showToast(msg: "Successfully Registered");
+
+          // Navigate to MainScreen
+          Navigator.push(context, MaterialPageRoute(builder: (c) => MainScreen()));
         }
-        await Fluttertoast.showToast(msg: "Successfully Registered");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => MainScreen()));
-      }).catchError((errorMessage) {
-        Fluttertoast.showToast(msg: "Error o ccured: \n $errorMessage");
-      });
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase Authentication errors
+        if (e.code == 'weak-password') {
+          Fluttertoast.showToast(msg: 'The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          Fluttertoast.showToast(msg: 'The email address is already in use by another account.');
+        } else {
+          Fluttertoast.showToast(msg: 'Registration failed: ${e.message}');
+        }
+      } catch (e) {
+        // Handle other potential errors (e.g., network issues)
+        Fluttertoast.showToast(msg: 'An unexpected error occurred:');
+      }
     } else {
       Fluttertoast.showToast(msg: "Not all fields are valid");
     }
@@ -443,7 +499,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     height: 20,
                                   ),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (c) =>
+                                                  ForgotPasswordScreen()));
+                                    },
                                     child: Text(
                                       'Forgot Password?',
                                       style: TextStyle(
@@ -469,7 +531,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         width: 5,
                                       ),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
+                                        },
                                         child: Text(
                                           "Sign In",
                                           style: TextStyle(

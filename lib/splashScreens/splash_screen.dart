@@ -4,6 +4,7 @@ import 'package:abu_share_ride/helpers/assistant_methods.dart';
 import 'package:abu_share_ride/global/global.dart';
 import 'package:abu_share_ride/screens/login_screen.dart';
 import 'package:abu_share_ride/screens/main_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -38,9 +39,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("ABU SHARE RIDE"),
+    return Material(
+      color: Colors.lightGreen,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            CupertinoIcons.car_detailed,
+            color: Colors.white,
+            size: 120,
+          ),
+          Text(
+            'ABU SHARE RIDE',
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge
+                ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
